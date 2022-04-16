@@ -6,21 +6,22 @@ using UnityEngine;
 
 public class GridPrototype : MonoBehaviour
 {
-    private bool buildModeOn = false;
-    private bool canBuild = false;
+    private bool buildModeOn = false; //this don't do nothing
+    private bool canBuild = false; //this don't do nothing
 
     [SerializeField]
     private Vector3 V3;
     [SerializeField]
     private int GridSize;
 
-    public float GridSensibility;
+    public float GridSensibility; //suggestions: max = 1
+                                  // other numbers you can use: 0.1, 0.01, 0.001
 
     [SerializeField]
-    private GameObject placeableObjectPrefab;
+    private GameObject placeableObjectPrefab; //prefab to spawn
 
     [SerializeField]
-    private KeyCode newObjectHotkey = KeyCode.A;
+    private KeyCode newObjectHotkey = KeyCode.A; //key for spawn object
 
     private GameObject currentPlaceableObject;
 
@@ -40,7 +41,7 @@ public class GridPrototype : MonoBehaviour
             currentPlaceableObject.transform.position = V3;
             //currentPlaceableObject.transform.position = hit.transform.position + hit.normal;
         }
-        GridSize = (int)Mathf.Round(0.1f / GridSensibility);
+        GridSize = (int)Mathf.Round(0.1f / GridSensibility); //Smart math operation
     }
 
     private void HandleNewObjectHotkey()
@@ -65,7 +66,7 @@ public class GridPrototype : MonoBehaviour
         RaycastHit hitInfo;
         if (Physics.Raycast(ray, out hitInfo))
         {
-            V3.x = (float) System.Math.Round(hitInfo.point.x + hitInfo.normal.x /2, GridSize);
+            V3.x = (float) System.Math.Round(hitInfo.point.x + hitInfo.normal.x /2, GridSize); //another smart math operation
             V3.y = (float) System.Math.Round(hitInfo.point.y + hitInfo.normal.y /2, GridSize);
             V3.z = (float) System.Math.Round(hitInfo.point.z + hitInfo.normal.z /2, GridSize);
             //V3 = hitInfo.point + hitInfo.normal /2;
@@ -75,7 +76,7 @@ public class GridPrototype : MonoBehaviour
 
     private void RotateFromMouseWheel()
     {
-        Debug.Log(Input.mouseScrollDelta);
+        Debug.Log(Input.mouseScrollDelta); //debug for know your rotation
         mouseWheelRotation += Input.mouseScrollDelta.y;
         currentPlaceableObject.transform.Rotate(Vector3.up, mouseWheelRotation * 10f);
     }
