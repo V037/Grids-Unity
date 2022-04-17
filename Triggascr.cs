@@ -2,23 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//credits: V.O37_
+
 public class Triggascr : MonoBehaviour
 {
-    public bool canBuildTr = true;
+    public bool canBuildTr = true; //another condition for make the other script work
 
-    public Collider collider;
-
-    private void Update()
-    {
-        collider = this.gameObject.GetComponent<Collider>();
-    }
-    private void OnTriggerEnter(Collider collider)
+    private void OnTriggerEnter(Collider collider) //on object touch or intersection you will not build
     {
 
-        //using tags for detect with what this object is colliding, this object should be a trigger
-        //If your player have the tag "player", this object will detect when your player is touching it
-        //remember to set the collider to trigger for make that work
-        if (collider.tag == "NoBuild")
+        if (collider.tag == "NoBuild") //create a tag from your unity project like this one
         {
             canBuildTr = false;
         }
