@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class GridPrototype : MonoBehaviour
 {
+  public vector3 V3;
+  
   private void MoveCurrentObjectToMouse()
   {
-      Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-      public vector3 V3;
       Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
       RaycastHit hitInfo;
       
