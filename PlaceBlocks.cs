@@ -2,7 +2,7 @@ using UnityEngine;
 
 //credits: V.037_
 
-public class GridPrototype : MonoBehaviour
+public class PlaceBlocks : MonoBehaviour
 {
   public vector3 V3;
   
