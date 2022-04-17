@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4407130666418076573}
   - component: {fileID: -2211309414158877149}
   m_Layer: 2
-  m_Name: The good one
+  m_Name: The good cube
   m_TagString: NoBuild
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
