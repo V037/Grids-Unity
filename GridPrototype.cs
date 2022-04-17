@@ -6,42 +6,48 @@ using UnityEngine;
 
 public class GridPrototype : MonoBehaviour
 {
-    private bool buildModeOn = false; //this don't do nothing
-    private bool canBuild = false; //this don't do nothing
+    private bool buildModeOn = false; //conditions for build
+    private bool canBuild = false;
+
+    public Triggascr Triggascr;
+
+    private Vector3 VR3; //raw coordinates
+    private Vector3 V3; //improved coordinates
 
     [SerializeField]
-    private Vector3 V3;
-    [SerializeField]
-    private int GridSize;
+    private float GridSize;
 
-    public float GridSensibility; //suggestions: max = 1
-                                  // other numbers you can use: 0.1, 0.01, 0.001
+    private float mouseWheelRotation = 0f; //Suggested value: 0
 
     [SerializeField]
-    private GameObject placeableObjectPrefab; //prefab to spawn
-
+    private KeyCode newObjectHotkey = KeyCode.A; //key for build
     [SerializeField]
-    private KeyCode newObjectHotkey = KeyCode.A; //key for spawn object
-
-    private GameObject currentPlaceableObject;
-
-    private float mouseWheelRotation = 0.1f;
+    private GameObject placeableObjectPrefab; //the prefab of your object
+    private GameObject currentPlaceableObject; //the spawned instance of your object
 
     private void Update()
     {
         HandleNewObjectHotkey();
 
-        if (currentPlaceableObject != null)
+        if (currentPlaceableObject != null && buildModeOn)
         {
             MoveCurrentObjectToMouse();
             RotateFromMouseWheel();
             ReleaseIfClicked();
-
-
-            currentPlaceableObject.transform.position = V3;
-            //currentPlaceableObject.transform.position = hit.transform.position + hit.normal;
+            Findscr();
         }
-        GridSize = (int)Mathf.Round(0.1f / GridSensibility); //Smart math operation
+    }
+
+    private void LateUpdate()
+    {
+        V3.x = Mathf.Floor(VR3.x / GridSize) * GridSize; //the power of Mathf
+        V3.y = Mathf.Floor(VR3.y / GridSize) * GridSize;
+        V3.z = Mathf.Floor(VR3.z / GridSize) * GridSize;
+
+        if(buildModeOn)
+        {
+            currentPlaceableObject.transform.position = V3; //coordinates converted to grid size
+        }
     }
 
     private void HandleNewObjectHotkey()
@@ -51,12 +57,19 @@ public class GridPrototype : MonoBehaviour
             if (currentPlaceableObject != null)
             {
                 Destroy(currentPlaceableObject);
+                buildModeOn = false;
             }
             else
             {
                 currentPlaceableObject = Instantiate(placeableObjectPrefab);
+                buildModeOn = true;
             }
         }
+    }
+
+    private void Findscr()
+    {
+        Triggascr = currentPlaceableObject.GetComponent<Triggascr>(); //this the script you need to place in the prefab
     }
 
     private void MoveCurrentObjectToMouse()
@@ -66,25 +79,28 @@ public class GridPrototype : MonoBehaviour
         RaycastHit hitInfo;
         if (Physics.Raycast(ray, out hitInfo))
         {
-            V3.x = (float) System.Math.Round(hitInfo.point.x + hitInfo.normal.x /2, GridSize); //another smart math operation
-            V3.y = (float) System.Math.Round(hitInfo.point.y + hitInfo.normal.y /2, GridSize);
-            V3.z = (float) System.Math.Round(hitInfo.point.z + hitInfo.normal.z /2, GridSize);
-            //V3 = hitInfo.point + hitInfo.normal /2;
+            VR3 = hitInfo.point + hitInfo.normal /2;
             currentPlaceableObject.transform.rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
+            canBuild = true;
+        }
+        else
+        {
+            canBuild = false;
         }
     }
 
     private void RotateFromMouseWheel()
     {
-        Debug.Log(Input.mouseScrollDelta); //debug for know your rotation
         mouseWheelRotation += Input.mouseScrollDelta.y;
         currentPlaceableObject.transform.Rotate(Vector3.up, mouseWheelRotation * 10f);
     }
 
     private void ReleaseIfClicked()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && canBuild && Triggascr.canBuildTr) //left mouse click and voila you placed a Cubic Abort
         {
+            currentPlaceableObject.layer = LayerMask.NameToLayer("Default"); //the prefab need the layer "ignore raycast" and when you place it would become a normal placed block
+            buildModeOn = false;
             currentPlaceableObject = null;
         }
     }
