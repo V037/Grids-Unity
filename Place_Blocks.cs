@@ -1,6 +1,6 @@
 using UnityEngine;
 
-//credits: V037_
+//credits: V.037_
 
 public class GridPrototype : MonoBehaviour
 {
