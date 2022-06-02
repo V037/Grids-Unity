@@ -224,6 +224,8 @@ public class GridPrototype : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1) && canBuild && Triggascr.canBuildTr)
         {
+            //Il centro geometrico del riquadro di delimitazione allineato all'asse contenente l'oggetto è a
+            //gameObject.renderer.bounds.center
             Triggascr2.AddHinge();
             currentPlaceableObject.tag = "BuildExist";
             Destroy(currentPlaceableObject.transform.Find("Tr").gameObject);
